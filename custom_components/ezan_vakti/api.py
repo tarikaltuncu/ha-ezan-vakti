@@ -9,7 +9,7 @@ import aiohttp
 from .const import API_BASE, API_VAKIT_KEYS
 
 # Identify ourselves so the server operator can tell this traffic apart (and reach us).
-USER_AGENT = "HomeAssistant-EzanVakti/0.1.1 (+https://github.com/tarikaltuncu/ha-ezan-vakti)"
+USER_AGENT = "HomeAssistant-EzanVakti/0.1.2 (+https://github.com/tarikaltuncu/ha-ezan-vakti)"
 
 
 class EzanVaktiApiError(Exception):

@@ -69,3 +69,19 @@ def test_next_ezan_respects_enabled_prayers():
     kw = {"fajr_offset": 15, "fasting": False, "ramadan_auto": True}
     assert schedule.next_ezan(at(10, 0), DAYS, TZ, prayers=["maghrib"], **kw) == ("maghrib", at(17, 57))
     assert schedule.next_ezan(at(10, 0), DAYS, TZ, prayers=[], **kw) is None
+
+
+def test_passed_vakit_rolls_to_tomorrow_after_5_min():
+    today = schedule.vakit_times(DAY, ROW, TZ)
+    tomorrow = schedule.vakit_times(DAY + timedelta(days=1), DAYS["2026-11-12"], TZ)
+    # 12:57: Öğle (12:53) passed 4 min ago → still today's; İmsak long passed → tomorrow's.
+    shown = schedule.shown_times(at(12, 57), today, tomorrow)
+    assert shown["dhuhr"] == at(12, 53)
+    assert shown["imsak"] == at(6, 13, DAY + timedelta(days=1))
+    assert shown["asr"] == at(15, 32)
+    # 12:58: exactly 5 min after Öğle → tomorrow's.
+    assert schedule.shown_times(at(12, 58), today, tomorrow)["dhuhr"] == at(12, 53, DAY + timedelta(days=1))
+    assert schedule.next_rollover(at(12, 57), today) == at(12, 58)
+    assert schedule.next_rollover(at(19, 25), today) is None
+    # No data for tomorrow yet: keep today's rather than show nothing.
+    assert schedule.shown_times(at(20, 0), today, {})["isha"] == at(19, 19)

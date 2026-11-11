@@ -51,8 +51,8 @@ There is one device per location.
 
 | Entity | What it is |
 |---|---|
-| `sensor.*_imsak`, `_sunrise`, `_dhuhr`, `_asr`, `_maghrib`, `_isha` | Today's vakits (timestamps) |
-| `sensor.*_fajr_ezan` | When today's Sabah ezan plays |
+| `sensor.*_imsak`, `_sunrise`, `_dhuhr`, `_asr`, `_maghrib`, `_isha` | The vakits (timestamps). Each shows today's time until 5 minutes after it has passed, then tomorrow's |
+| `sensor.*_fajr_ezan` | When the Sabah ezan plays (moves to tomorrow's the same way) |
 | `sensor.*_next_ezan` | Next ezan (Fajr/Dhuhr/Asr/Maghrib/Isha), attribute `time` |
 | `sensor.*_next_ezan_time` | Its timestamp, handy for a live countdown card |
 | `sensor.*_time_to_next_ezan` | Minutes left, updated every minute (attribute `hh_mm`) |

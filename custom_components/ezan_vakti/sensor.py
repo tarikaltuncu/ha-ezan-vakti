@@ -1,4 +1,4 @@
-"""Today's vakits, the Sabah ezanı time, the next ezan and the countdown."""
+"""Vakits and the Sabah ezanı time (today's, or tomorrow's once 5 min past), the next ezan and the countdown."""
 
 from __future__ import annotations
 
@@ -34,7 +34,7 @@ async def async_setup_entry(
 
 
 class VakitSensor(EzanVaktiEntity, SensorEntity):
-    """Today's time of one Diyanet vakit."""
+    """One Diyanet vakit: today's time until 5 min after it, then tomorrow's."""
 
     _attr_device_class = SensorDeviceClass.TIMESTAMP
 
@@ -44,11 +44,11 @@ class VakitSensor(EzanVaktiEntity, SensorEntity):
 
     @property
     def native_value(self) -> datetime | None:
-        return self.runtime.today_vakits().get(self._vakit)
+        return self.runtime.shown_vakits().get(self._vakit)
 
 
 class FajrEzanSensor(EzanVaktiEntity, SensorEntity):
-    """When today's Sabah ezanı plays: Güneş − offset, or İmsak when fasting."""
+    """When the Sabah ezanı plays (Güneş − offset, or İmsak when fasting); tomorrow's once 5 min past."""
 
     _attr_device_class = SensorDeviceClass.TIMESTAMP
 
@@ -57,11 +57,13 @@ class FajrEzanSensor(EzanVaktiEntity, SensorEntity):
 
     @property
     def native_value(self) -> datetime | None:
-        return self.runtime.today_ezans().get("fajr")
+        return self.runtime.shown_fajr()
 
     @property
     def extra_state_attributes(self) -> dict:
-        return {"fasting": self.runtime.fasting_today()}
+        shown = self.native_value
+        offset = 1 if shown and shown.date() > dt_util.now().date() else 0
+        return {"fasting": self.runtime.fasting_on(offset)}
 
 
 class NextEzanSensor(EzanVaktiEntity, SensorEntity):

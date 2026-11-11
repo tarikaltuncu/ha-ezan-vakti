@@ -79,3 +79,28 @@ def next_ezan(
             if prayer in prayers and times[prayer] > now:
                 return prayer, times[prayer]
     return None
+
+
+# A passed vakit keeps showing for this long, then the sensor shows tomorrow's time
+# (once passed, a time is only useful as a preview of tomorrow's).
+ROLLOVER = timedelta(minutes=5)
+
+
+def shown_times(
+    now: datetime, today: dict[str, datetime], tomorrow: dict[str, datetime]
+) -> dict[str, datetime]:
+    """Today's time for each key until ROLLOVER after it has passed, then tomorrow's."""
+    out: dict[str, datetime] = {}
+    for key in today.keys() | tomorrow.keys():
+        t = today.get(key)
+        if key in tomorrow and (t is None or now >= t + ROLLOVER):
+            out[key] = tomorrow[key]
+        elif t is not None:
+            out[key] = t  # not passed yet, or no data for tomorrow
+    return out
+
+
+def next_rollover(now: datetime, today: dict[str, datetime]) -> datetime | None:
+    """The next moment a shown time switches to tomorrow's, if any is left today."""
+    future = [t + ROLLOVER for t in today.values() if t + ROLLOVER > now]
+    return min(future) if future else None

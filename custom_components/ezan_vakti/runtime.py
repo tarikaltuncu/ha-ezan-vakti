@@ -49,7 +49,7 @@ from .const import (
     SIGNAL_UPDATE,
 )
 from .coordinator import EzanVaktiCoordinator
-from .schedule import ezan_times, is_fasting, next_ezan, vakit_times
+from .schedule import ezan_times, is_fasting, next_ezan, next_rollover, shown_times, vakit_times
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -70,6 +70,7 @@ class EzanVaktiRuntime:
         self.audio = audio
         self.next: tuple[str, datetime] | None = None
         self._unsub_timer: CALLBACK_TYPE | None = None
+        self._unsub_roll: CALLBACK_TYPE | None = None
         self._unsubs: list[CALLBACK_TYPE] = []
         self._restore_tasks: set[asyncio.Task] = set()
 
@@ -90,26 +91,46 @@ class EzanVaktiRuntime:
     def tz(self):
         return dt_util.get_default_time_zone()
 
+    def row(self, offset: int = 0) -> dict[str, str] | None:
+        day = dt_util.now().date() + timedelta(days=offset)
+        return (self.coordinator.data or {}).get(day.isoformat())
+
     def today_row(self) -> dict[str, str] | None:
-        return (self.coordinator.data or {}).get(dt_util.now().date().isoformat())
+        return self.row(0)
 
-    def today_vakits(self) -> dict[str, datetime]:
-        row = self.today_row()
-        return vakit_times(dt_util.now().date(), row, self.tz) if row else {}
+    def day_vakits(self, offset: int = 0) -> dict[str, datetime]:
+        row = self.row(offset)
+        day = dt_util.now().date() + timedelta(days=offset)
+        return vakit_times(day, row, self.tz) if row else {}
 
-    def today_ezans(self) -> dict[str, datetime]:
-        row = self.today_row()
+    def day_ezans(self, offset: int = 0) -> dict[str, datetime]:
+        row = self.row(offset)
         if not row:
             return {}
         o = self.options
         return ezan_times(
-            dt_util.now().date(), row, self.tz,
+            dt_util.now().date() + timedelta(days=offset), row, self.tz,
             fajr_offset=int(o[CONF_FAJR_OFFSET]), fasting=o[CONF_FASTING], ramadan_auto=o[CONF_RAMADAN_AUTO],
         )
 
-    def fasting_today(self) -> bool:
-        row = self.today_row() or {}
+    def shown_vakits(self) -> dict[str, datetime]:
+        """What the vakit sensors show: today's, or tomorrow's once 5 min past."""
+        return shown_times(dt_util.now(), self.day_vakits(0), self.day_vakits(1))
+
+    def shown_fajr(self) -> datetime | None:
+        today, tomorrow = self.day_ezans(0), self.day_ezans(1)
+        return shown_times(
+            dt_util.now(),
+            {"fajr": today["fajr"]} if today else {},
+            {"fajr": tomorrow["fajr"]} if tomorrow else {},
+        ).get("fajr")
+
+    def fasting_on(self, offset: int = 0) -> bool:
+        row = self.row(offset) or {}
         return is_fasting(row, self.options[CONF_FASTING], self.options[CONF_RAMADAN_AUTO])
+
+    def fasting_today(self) -> bool:
+        return self.fasting_on(0)
 
     # ── lifecycle ────────────────────────────────────────────────────────────
     @callback
@@ -126,6 +147,9 @@ class EzanVaktiRuntime:
         if self._unsub_timer:
             self._unsub_timer()
             self._unsub_timer = None
+        if self._unsub_roll:
+            self._unsub_roll()
+            self._unsub_roll = None
         for unsub in self._unsubs:
             unsub()
         self._unsubs.clear()
@@ -146,6 +170,28 @@ class EzanVaktiRuntime:
         )
         if self.next:
             self._unsub_timer = async_track_point_in_time(self.hass, self._fire, self.next[1])
+        self._arm_rollover()
+        async_dispatcher_send(self.hass, SIGNAL_UPDATE.format(self.entry.entry_id))
+
+    @callback
+    def _arm_rollover(self) -> None:
+        """Refresh the entities when a passed vakit switches to tomorrow's time."""
+        if self._unsub_roll:
+            self._unsub_roll()
+            self._unsub_roll = None
+        today = {**self.day_vakits(0), **{f"ezan_{k}": v for k, v in self.day_ezans(0).items()}}
+        at = next_rollover(dt_util.now(), today)
+        if at:
+            self._unsub_roll = async_track_point_in_time(self.hass, self._rolled, at)
+
+    @callback
+    def _rolled(self, _now: datetime) -> None:
+        self._unsub_roll = None
+        self.hass.loop.call_later(1, self._after_roll)
+
+    @callback
+    def _after_roll(self) -> None:
+        self._arm_rollover()
         async_dispatcher_send(self.hass, SIGNAL_UPDATE.format(self.entry.entry_id))
 
     @callback
