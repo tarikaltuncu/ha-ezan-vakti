@@ -1,0 +1,247 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Konum",
+        "description": "Vakitler Diyanet'in; tüm ülkeler için. Ülkenizi seçin.",
+        "data": {
+          "country_id": "Ülke"
+        }
+      },
+      "city": {
+        "title": "Şehir",
+        "description": "{country}",
+        "data": {
+          "city_id": "Şehir"
+        }
+      },
+      "district": {
+        "title": "İlçe",
+        "description": "{city}: ilçeniz listede yoksa şehrin kendisini seçin (merkezi kapsar).",
+        "data": {
+          "district_id": "İlçe"
+        }
+      },
+      "settings": {
+        "title": "Ezan",
+        "description": "{location}",
+        "data": {
+          "speakers": "Hoparlörler",
+          "style": "Ezan stili",
+          "volume": "Ses seviyesi",
+          "prayers": "Hangi ezanlar okunsun",
+          "fajr_minutes_before_sunrise": "Sabah ezanı: Güneş'ten kaç dakika önce",
+          "fasting": "Oruç: Sabah ezanı İmsak vaktinde",
+          "ramadan_auto": "Ramazan'da otomatik oruç",
+          "presence_entity": "Sadece bu evde/açıkken (isteğe bağlı)"
+        },
+        "data_description": {
+          "speakers": "Herhangi bir medya oynatıcı. Sadece vakitleri göstermek için boş bırakın.",
+          "fajr_minutes_before_sunrise": "Güneş doğmadan namaz kılmanız için uyandırır. İmsak'tan önce olmaz.",
+          "fasting": "Oruç tuttuğunuz günler için: Sabah ezanı İmsak vaktinde okunur.",
+          "presence_entity": "Kişi, cihaz, grup, bölge veya ikili sensör. Boş = her zaman oku."
+        }
+      }
+    },
+    "abort": {
+      "cannot_connect": "ezanvakti.emushaf.net'e ulaşılamadı. Daha sonra tekrar deneyin.",
+      "already_configured": "Bu konum zaten ekli."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Ezan ayarları",
+        "data": {
+          "enabled": "Ezanı oku",
+          "speakers": "Hoparlörler",
+          "style": "Ezan stili",
+          "volume": "Ses seviyesi",
+          "prayers": "Hangi ezanlar okunsun",
+          "fajr_minutes_before_sunrise": "Sabah ezanı: Güneş'ten kaç dakika önce",
+          "fasting": "Oruç: Sabah ezanı İmsak vaktinde",
+          "ramadan_auto": "Ramazan'da otomatik oruç",
+          "presence_entity": "Sadece bu evde/açıkken (isteğe bağlı)",
+          "restore_volume": "Sonra hoparlörün sesini eski haline getir",
+          "announce": "Duyuru olarak çal (müziği sürdürür; hoparlör desteği gerekir)",
+          "custom_fajr_url": "Özel stil: Sabah ezanı ses URL'si",
+          "custom_adhan_url": "Özel stil: diğer vakitler için ezan URL'si"
+        },
+        "data_description": {
+          "speakers": "Herhangi bir medya oynatıcı. Sadece vakitleri göstermek için boş bırakın.",
+          "fajr_minutes_before_sunrise": "Güneş doğmadan namaz kılmanız için uyandırır. İmsak'tan önce olmaz.",
+          "fasting": "Oruç tuttuğunuz günler için: Sabah ezanı İmsak vaktinde okunur.",
+          "presence_entity": "Kişi, cihaz, grup, bölge veya ikili sensör. Boş = her zaman oku.",
+          "custom_fajr_url": "http(s) URL, /local/… yolu veya media-source:// kimliği."
+        }
+      }
+    }
+  },
+  "selector": {
+    "style": {
+      "options": {
+        "turkish_sehitoglu": "Türk – Abdulkadir Şehitoğlu (Saba · Rast · Hicaz · Segâh · Uşşak)",
+        "turkish_erarabaci": "Türk – Mehmet Erarabacı (Saba · Uşşak · Rast · Segâh · Hicaz)",
+        "makkah": "Mekke – Mescid-i Haram",
+        "madinah": "Medine – Mescid-i Nebevî",
+        "mishary": "Kuveyt – Mişari Alafasi",
+        "egyptian": "Mısır – Abdulbasit Abdussamed",
+        "palestinian": "Filistin – Mescid-i Aksa",
+        "syrian": "Suriye",
+        "random": "Rastgele (her seferinde farklı)",
+        "custom": "Özel (kendi URL'lerim)",
+        "all": "Tüm stiller"
+      }
+    },
+    "prayer": {
+      "options": {
+        "fajr": "Sabah",
+        "dhuhr": "Öğle",
+        "asr": "İkindi",
+        "maghrib": "Akşam",
+        "isha": "Yatsı"
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "imsak": {
+        "name": "İmsak"
+      },
+      "sunrise": {
+        "name": "Güneş"
+      },
+      "dhuhr": {
+        "name": "Öğle"
+      },
+      "asr": {
+        "name": "İkindi"
+      },
+      "maghrib": {
+        "name": "Akşam"
+      },
+      "isha": {
+        "name": "Yatsı"
+      },
+      "fajr_ezan": {
+        "name": "Sabah ezanı"
+      },
+      "next_ezan": {
+        "name": "Sıradaki ezan",
+        "state": {
+          "fajr": "Sabah",
+          "dhuhr": "Öğle",
+          "asr": "İkindi",
+          "maghrib": "Akşam",
+          "isha": "Yatsı"
+        }
+      },
+      "next_ezan_time": {
+        "name": "Sıradaki ezan vakti"
+      },
+      "next_ezan_countdown": {
+        "name": "Sıradaki ezana kalan"
+      },
+      "hijri_date": {
+        "name": "Hicri tarih"
+      }
+    },
+    "binary_sensor": {
+      "fasting_active": {
+        "name": "Bugün oruç"
+      }
+    },
+    "switch": {
+      "enabled": {
+        "name": "Ezan"
+      },
+      "fasting": {
+        "name": "Oruç (Sabah İmsak'ta)"
+      },
+      "ramadan_auto": {
+        "name": "Ramazan'da otomatik oruç"
+      }
+    },
+    "number": {
+      "fajr_minutes_before_sunrise": {
+        "name": "Sabah ezanı Güneş'ten önce"
+      },
+      "volume": {
+        "name": "Ezan ses seviyesi"
+      }
+    },
+    "select": {
+      "style": {
+        "name": "Ezan stili",
+        "state": {
+          "turkish_sehitoglu": "Türk – Abdulkadir Şehitoğlu (Saba · Rast · Hicaz · Segâh · Uşşak)",
+          "turkish_erarabaci": "Türk – Mehmet Erarabacı (Saba · Uşşak · Rast · Segâh · Hicaz)",
+          "makkah": "Mekke – Mescid-i Haram",
+          "madinah": "Medine – Mescid-i Nebevî",
+          "mishary": "Kuveyt – Mişari Alafasi",
+          "egyptian": "Mısır – Abdulbasit Abdussamed",
+          "palestinian": "Filistin – Mescid-i Aksa",
+          "syrian": "Suriye",
+          "random": "Rastgele (her seferinde farklı)",
+          "custom": "Özel (kendi URL'lerim)"
+        }
+      }
+    },
+    "button": {
+      "play_next": {
+        "name": "Sıradaki ezanı şimdi oku"
+      },
+      "stop": {
+        "name": "Durdur"
+      }
+    }
+  },
+  "services": {
+    "play": {
+      "name": "Ezan oku",
+      "description": "Ezanı şimdi ayarlı (veya verilen) hoparlörlerde okur.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Konum",
+          "description": "Sadece birden fazla konum varsa gerekir."
+        },
+        "prayer": {
+          "name": "Vakit",
+          "description": "Varsayılan: sıradaki ezan."
+        },
+        "style": {
+          "name": "Stil",
+          "description": "Varsayılan: ayarlı stil."
+        },
+        "speakers": {
+          "name": "Hoparlörler",
+          "description": "Varsayılan: ayarlı hoparlörler."
+        }
+      }
+    },
+    "stop": {
+      "name": "Ezanı durdur",
+      "description": "Hoparlörlerde çalmayı durdurur.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Konum",
+          "description": "Sadece birden fazla konum varsa gerekir."
+        },
+        "speakers": {
+          "name": "Hoparlörler",
+          "description": "Varsayılan: ayarlı hoparlörler."
+        }
+      }
+    },
+    "download_audio": {
+      "name": "Ezan seslerini indir",
+      "description": "Kayıtları ilk kullanımda değil şimdi indirir (ve ses seviyesini eşitler).",
+      "fields": {
+        "style": {
+          "name": "Stil",
+          "description": "Varsayılan: tüm stiller."
+        }
+      }
+    }
+  }
+}

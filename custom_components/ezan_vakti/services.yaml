@@ -1,0 +1,58 @@
+play:
+  fields:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: ezan_vakti
+    prayer:
+      selector:
+        select:
+          translation_key: prayer
+          options: [fajr, dhuhr, asr, maghrib, isha]
+    style:
+      selector:
+        select:
+          translation_key: style
+          options:
+            - turkish_sehitoglu
+            - turkish_erarabaci
+            - makkah
+            - madinah
+            - mishary
+            - egyptian
+            - palestinian
+            - syrian
+            - random
+            - custom
+    speakers:
+      selector:
+        entity:
+          domain: media_player
+          multiple: true
+stop:
+  fields:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: ezan_vakti
+    speakers:
+      selector:
+        entity:
+          domain: media_player
+          multiple: true
+download_audio:
+  fields:
+    style:
+      selector:
+        select:
+          translation_key: style
+          options:
+            - all
+            - turkish_sehitoglu
+            - turkish_erarabaci
+            - makkah
+            - madinah
+            - mishary
+            - egyptian
+            - palestinian
+            - syrian

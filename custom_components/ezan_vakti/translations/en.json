@@ -1,0 +1,247 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Location",
+        "description": "Prayer times are Diyanet's, for any country. Pick your country.",
+        "data": {
+          "country_id": "Country"
+        }
+      },
+      "city": {
+        "title": "City",
+        "description": "{country}",
+        "data": {
+          "city_id": "City"
+        }
+      },
+      "district": {
+        "title": "District",
+        "description": "{city}: if your district isn't listed, pick the city itself (it covers the centre).",
+        "data": {
+          "district_id": "District"
+        }
+      },
+      "settings": {
+        "title": "Ezan",
+        "description": "{location}",
+        "data": {
+          "speakers": "Speakers",
+          "style": "Recording style",
+          "volume": "Volume",
+          "prayers": "Which ezans to play",
+          "fajr_minutes_before_sunrise": "Fajr ezan: minutes before sunrise",
+          "fasting": "Fasting: Fajr ezan at İmsak",
+          "ramadan_auto": "Fasting automatically in Ramadan",
+          "presence_entity": "Only when this is home/on (optional)"
+        },
+        "data_description": {
+          "speakers": "Any media player. Leave empty to only show the times.",
+          "fajr_minutes_before_sunrise": "Wakes you in time to pray before sunrise. Never earlier than İmsak.",
+          "fasting": "For any day you fast: the Fajr ezan is called at İmsak instead.",
+          "presence_entity": "A person, device tracker, group, zone or binary sensor. Empty = always play."
+        }
+      }
+    },
+    "abort": {
+      "cannot_connect": "Could not reach ezanvakti.emushaf.net. Try again later.",
+      "already_configured": "This location is already set up."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Ezan settings",
+        "data": {
+          "enabled": "Play the ezan",
+          "speakers": "Speakers",
+          "style": "Recording style",
+          "volume": "Volume",
+          "prayers": "Which ezans to play",
+          "fajr_minutes_before_sunrise": "Fajr ezan: minutes before sunrise",
+          "fasting": "Fasting: Fajr ezan at İmsak",
+          "ramadan_auto": "Fasting automatically in Ramadan",
+          "presence_entity": "Only when this is home/on (optional)",
+          "restore_volume": "Restore the speaker's volume afterwards",
+          "announce": "Play as announcement (resumes music; needs speaker support)",
+          "custom_fajr_url": "Custom style: Fajr audio URL",
+          "custom_adhan_url": "Custom style: ezan audio URL (other prayers)"
+        },
+        "data_description": {
+          "speakers": "Any media player. Leave empty to only show the times.",
+          "fajr_minutes_before_sunrise": "Wakes you in time to pray before sunrise. Never earlier than İmsak.",
+          "fasting": "For any day you fast: the Fajr ezan is called at İmsak instead.",
+          "presence_entity": "A person, device tracker, group, zone or binary sensor. Empty = always play.",
+          "custom_fajr_url": "http(s) URL, /local/… path or media-source:// id."
+        }
+      }
+    }
+  },
+  "selector": {
+    "style": {
+      "options": {
+        "turkish_sehitoglu": "Turkish – Abdulkadir Şehitoğlu (Saba · Rast · Hicaz · Segâh · Uşşak)",
+        "turkish_erarabaci": "Turkish – Mehmet Erarabacı (Saba · Uşşak · Rast · Segâh · Hicaz)",
+        "makkah": "Makkah – Masjid al-Haram",
+        "madinah": "Madinah – Masjid an-Nabawi",
+        "mishary": "Kuwait – Mishary Alafasy",
+        "egyptian": "Egyptian – Abdul Basit",
+        "palestinian": "Palestinian – al-Aqsa",
+        "syrian": "Syrian",
+        "random": "Random (a different style each time)",
+        "custom": "Custom (my own URLs)",
+        "all": "All styles"
+      }
+    },
+    "prayer": {
+      "options": {
+        "fajr": "Fajr (Sabah)",
+        "dhuhr": "Dhuhr (Öğle)",
+        "asr": "Asr (İkindi)",
+        "maghrib": "Maghrib (Akşam)",
+        "isha": "Isha (Yatsı)"
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "imsak": {
+        "name": "İmsak"
+      },
+      "sunrise": {
+        "name": "Sunrise"
+      },
+      "dhuhr": {
+        "name": "Dhuhr"
+      },
+      "asr": {
+        "name": "Asr"
+      },
+      "maghrib": {
+        "name": "Maghrib"
+      },
+      "isha": {
+        "name": "Isha"
+      },
+      "fajr_ezan": {
+        "name": "Fajr ezan"
+      },
+      "next_ezan": {
+        "name": "Next ezan",
+        "state": {
+          "fajr": "Fajr (Sabah)",
+          "dhuhr": "Dhuhr (Öğle)",
+          "asr": "Asr (İkindi)",
+          "maghrib": "Maghrib (Akşam)",
+          "isha": "Isha (Yatsı)"
+        }
+      },
+      "next_ezan_time": {
+        "name": "Next ezan time"
+      },
+      "next_ezan_countdown": {
+        "name": "Time to next ezan"
+      },
+      "hijri_date": {
+        "name": "Hijri date"
+      }
+    },
+    "binary_sensor": {
+      "fasting_active": {
+        "name": "Fasting today"
+      }
+    },
+    "switch": {
+      "enabled": {
+        "name": "Ezan"
+      },
+      "fasting": {
+        "name": "Fasting"
+      },
+      "ramadan_auto": {
+        "name": "Ramadan auto-fasting"
+      }
+    },
+    "number": {
+      "fajr_minutes_before_sunrise": {
+        "name": "Fajr ezan before sunrise"
+      },
+      "volume": {
+        "name": "Ezan volume"
+      }
+    },
+    "select": {
+      "style": {
+        "name": "Ezan style",
+        "state": {
+          "turkish_sehitoglu": "Turkish – Abdulkadir Şehitoğlu (Saba · Rast · Hicaz · Segâh · Uşşak)",
+          "turkish_erarabaci": "Turkish – Mehmet Erarabacı (Saba · Uşşak · Rast · Segâh · Hicaz)",
+          "makkah": "Makkah – Masjid al-Haram",
+          "madinah": "Madinah – Masjid an-Nabawi",
+          "mishary": "Kuwait – Mishary Alafasy",
+          "egyptian": "Egyptian – Abdul Basit",
+          "palestinian": "Palestinian – al-Aqsa",
+          "syrian": "Syrian",
+          "random": "Random (a different style each time)",
+          "custom": "Custom (my own URLs)"
+        }
+      }
+    },
+    "button": {
+      "play_next": {
+        "name": "Play next ezan now"
+      },
+      "stop": {
+        "name": "Stop"
+      }
+    }
+  },
+  "services": {
+    "play": {
+      "name": "Play ezan",
+      "description": "Play the ezan now on the configured (or given) speakers.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Location",
+          "description": "Only needed with several locations."
+        },
+        "prayer": {
+          "name": "Prayer",
+          "description": "Default: the next ezan."
+        },
+        "style": {
+          "name": "Style",
+          "description": "Default: the configured style."
+        },
+        "speakers": {
+          "name": "Speakers",
+          "description": "Default: the configured speakers."
+        }
+      }
+    },
+    "stop": {
+      "name": "Stop ezan",
+      "description": "Stop playback on the speakers.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Location",
+          "description": "Only needed with several locations."
+        },
+        "speakers": {
+          "name": "Speakers",
+          "description": "Default: the configured speakers."
+        }
+      }
+    },
+    "download_audio": {
+      "name": "Download ezan audio",
+      "description": "Download (and normalise) recordings now instead of on first use.",
+      "fields": {
+        "style": {
+          "name": "Style",
+          "description": "Default: all styles."
+        }
+      }
+    }
+  }
+}
