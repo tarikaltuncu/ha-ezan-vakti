@@ -9,9 +9,11 @@ integrations), ESPHome and more.
 ## What it does
 
 - **Times for 200+ countries.** They come from Diyanet's monthly tables through
-  [ezanvakti.emushaf.net](https://ezanvakti.emushaf.net). The integration refreshes them
-  every 6 hours and keeps about 4 weeks on disk, so it keeps working through outages
-  and offline restarts.
+  [ezanvakti.emushaf.net](https://ezanvakti.emushaf.net), a free community server, so the
+  integration is gentle with it. One call returns about 4 weeks, which is kept on disk.
+  It calls again only when fewer than 7 days are left, about once every 3 weeks per
+  location. Restarts and settings changes don't call it. If a refresh fails, it retries
+  every 6 hours and keeps using the stored times meanwhile.
 - **The ezan plays at Sabah, Öğle, İkindi, Akşam and Yatsı.** There is no ezan at
   İmsak or Güneş (sunrise).
 - **The Sabah (Fajr) ezan wakes you before sunrise.** By default it plays 15 minutes

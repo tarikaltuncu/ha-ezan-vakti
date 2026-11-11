@@ -8,6 +8,9 @@ import aiohttp
 
 from .const import API_BASE, API_VAKIT_KEYS
 
+# Identify ourselves so the server operator can tell this traffic apart (and reach us).
+USER_AGENT = "HomeAssistant-EzanVakti/0.1.1 (+https://github.com/tarikaltuncu/ha-ezan-vakti)"
+
 
 class EzanVaktiApiError(Exception):
     """The prayer-times API could not be reached or returned bad data."""
@@ -22,7 +25,9 @@ class EzanVaktiApi:
     async def _get(self, path: str) -> Any:
         try:
             async with self._session.get(
-                f"{API_BASE}{path}", timeout=aiohttp.ClientTimeout(total=30)
+                f"{API_BASE}{path}",
+                headers={"User-Agent": USER_AGENT},
+                timeout=aiohttp.ClientTimeout(total=30),
             ) as resp:
                 if resp.status != 200:
                     raise EzanVaktiApiError(f"{path}: HTTP {resp.status}")
